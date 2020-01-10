@@ -6,7 +6,7 @@ import User from '../../mongoModels/User'
 
 export const postRegister = async (
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -29,15 +29,30 @@ export const postRegister = async (
       // })
     }
 
-    const user = new User({
+    const user = await User.findOne({ username })
+    if (user) {
+      throw new HttpException(UNPROCESSABLE_ENTITY, '用户名已存在')
+    }
+
+    const hadEmail = await User.findOne({ email })
+    if (hadEmail) {
+      throw new HttpException(UNPROCESSABLE_ENTITY, '邮箱已被使用')
+    }
+
+    const newUser = new User({
       username,
       email,
       password
     })
 
-    const newUser = await user.save()
+    const resUser = await newUser.save()
 
-    console.log('TCL: newUser', newUser)
+    console.log('TCL: resUser', resUser)
+    res.json({
+      success: true,
+      data: resUser._doc,
+      message: '注册成功'
+    })
   } catch (error) {
     next(error)
   }

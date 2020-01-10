@@ -1,18 +1,16 @@
 import isEmail from 'validator/lib/isEmail'
 import isEmpty from 'validator/lib/isEmpty'
+import { IUserDocument } from 'src/mongoModels/User'
 
-interface RegisterInputError {
-  username?: string
-  password?: string
-  email?: string
+interface RegisterInputError extends Partial<IUserDocument> {
   confirmPassword?: string
 }
 
 export const validateRegisterInput = (
-  username: string,
-  password: string,
-  confirmPassword: string,
-  email: string
+  username: IUserDocument['username'],
+  password: IUserDocument['password'],
+  confirmPassword: IUserDocument['password'],
+  email: IUserDocument['email']
 ) => {
   let errors: RegisterInputError = {}
 
