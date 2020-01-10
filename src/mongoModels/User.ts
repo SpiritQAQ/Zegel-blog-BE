@@ -1,4 +1,5 @@
-import { Schema, model, Model, Document } from 'mongoose'
+import { Schema, model, Model, Document, HookNextFunction } from 'mongoose'
+import bcrypt from 'bcryptjs'
 
 export interface IUserDocument extends Document {
   username: string
@@ -19,6 +20,21 @@ const userSchema: Schema = new Schema({
   email: String,
   password: String,
   createAt: String
+})
+
+userSchema.pre<IUserDocument>('save', async function(next: HookNextFunction) {
+  // 保存到数据库之前的钩子函数
+  if (!this.isModified('password')) {
+    // 如果不是修改
+    return next()
+  }
+  try {
+    const hashedPassword = await bcrypt.hash(this.password, 10)
+    this.password = hashedPassword
+    next()
+  } catch (error) {
+    next(error)
+  }
 })
 
 const User: Model<IUserDocument, {}> = model<IUserDocument>('User', userSchema)

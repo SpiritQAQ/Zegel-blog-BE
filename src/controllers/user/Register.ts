@@ -39,6 +39,8 @@ export const postRegister = async (
       throw new HttpException(UNPROCESSABLE_ENTITY, '邮箱已被使用')
     }
 
+    // const hashedPassword = await bcrypt.hash(password, 10)
+
     const newUser = new User({
       username,
       email,
