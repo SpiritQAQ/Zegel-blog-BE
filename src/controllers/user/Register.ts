@@ -2,9 +2,11 @@ import { Request, Response, NextFunction } from 'express'
 import { validateRegisterInput } from '../../utils/validator'
 import HttpException from '../../exceptions/HttpException'
 import { UNPROCESSABLE_ENTITY } from 'http-status-codes'
-export const postRegister = (
+import User from '../../mongoModels/User'
+
+export const postRegister = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) => {
   try {
@@ -26,7 +28,16 @@ export const postRegister = (
       //   message: errorText
       // })
     }
-    res.json('ok')
+
+    const user = new User({
+      username,
+      email,
+      password
+    })
+
+    const newUser = await user.save()
+
+    console.log('TCL: newUser', newUser)
   } catch (error) {
     next(error)
   }
