@@ -4,6 +4,7 @@ import { NOT_FOUND } from 'http-status-codes'
 import HttpException from './exceptions/HttpException'
 import errorMiddleware from './middlewares/error.middleware'
 import * as userController from './controllers/user/index'
+import 'dotenv/config'
 
 const app: Express = express()
 const PORT: any = process.env.PORT || 3000

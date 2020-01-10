@@ -3,6 +3,7 @@ import { validateRegisterInput } from '../../utils/validator'
 import HttpException from '../../exceptions/HttpException'
 import { UNPROCESSABLE_ENTITY } from 'http-status-codes'
 import User from '../../mongoModels/User'
+import jwt from 'jsonwebtoken'
 
 export const postRegister = async (
   req: Request,
@@ -49,10 +50,19 @@ export const postRegister = async (
 
     const resUser = await newUser.save()
 
+    const token = jwt.sign(
+      {
+        id: resUser.id
+      },
+      process.env.JWT_SCRECT_KEY!,
+      {
+        expiresIn: '1m'
+      }
+    )
     console.log('TCL: resUser', resUser)
     res.json({
       success: true,
-      data: resUser._doc,
+      data: token,
       message: '注册成功'
     })
   } catch (error) {
