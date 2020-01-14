@@ -3,7 +3,6 @@ import { validateRegisterInput } from '../../utils/validator'
 import HttpException from '../../exceptions/HttpException'
 import { UNPROCESSABLE_ENTITY } from 'http-status-codes'
 import User from '../../mongoModels/User'
-import jwt from 'jsonwebtoken'
 
 export const postRegister = async (
   req: Request,
@@ -47,19 +46,12 @@ export const postRegister = async (
       email,
       password
     })
+    // 密码加密在数据库保存时的钩子函数中
 
     const resUser = await newUser.save()
 
-    const token = jwt.sign(
-      {
-        id: resUser.id
-      },
-      process.env.JWT_SCRECT_KEY!,
-      {
-        expiresIn: '1m'
-      }
-    )
-    console.log('TCL: resUser', resUser)
+    const token: string = resUser.generateToken()
+
     res.json({
       success: true,
       data: token,
