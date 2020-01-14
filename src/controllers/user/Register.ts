@@ -54,7 +54,10 @@ export const postRegister = async (
 
     res.json({
       success: true,
-      data: token,
+      data: {
+        token,
+        ...resUser._doc
+      },
       message: '注册成功'
     })
   } catch (error) {
