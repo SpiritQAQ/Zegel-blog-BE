@@ -1,6 +1,7 @@
 import { Schema, model, Model, Document, HookNextFunction } from 'mongoose'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { JwtPayload } from '../types/Jwt'
 
 export interface IUserDocument extends Document {
   username: string
@@ -29,11 +30,10 @@ const userSchema: Schema = new Schema(
   }
 )
 
-userSchema.methods.generateToken = function() {
+userSchema.methods.generateToken = function () {
+  const payload: JwtPayload = { id: this.id }
   return jwt.sign(
-    {
-      id: this.id
-    },
+    payload,
     process.env.JWT_SECRET_KEY!, // 非空断言
     {
       expiresIn: '1h'
@@ -41,7 +41,7 @@ userSchema.methods.generateToken = function() {
   )
 }
 
-userSchema.pre<IUserDocument>('save', async function(next: HookNextFunction) {
+userSchema.pre<IUserDocument>('save', async function (next: HookNextFunction) {
   // 保存到数据库之前的钩子函数
   if (!this.isModified('password')) {
     // 如果不是修改
