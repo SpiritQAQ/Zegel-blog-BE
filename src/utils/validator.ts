@@ -1,9 +1,12 @@
 import isEmail from 'validator/lib/isEmail'
 import isEmpty from 'validator/lib/isEmpty'
-import { IUserDocument } from 'src/mongoModels/User'
+import { IUserDocument } from '../mongoModels/User'
 
 interface RegisterInputError extends Partial<IUserDocument> {
   confirmPassword?: string
+}
+
+interface LoginInputError extends Partial<IUserDocument> {
 }
 
 export const validateRegisterInput = (
@@ -34,4 +37,21 @@ export const validateRegisterInput = (
   }
 
   return { errors, valid: Object.keys(errors).length < 1 }
+}
+
+export const validateLoginInput = (
+  password: IUserDocument['password'],
+  usernameOrEmail: string
+) => {
+  let errors: LoginInputError = {}
+
+  if (isEmpty(usernameOrEmail)) {
+    errors.username = '用户名或邮箱不能为空'
+  }
+  if (isEmpty(password)) {
+    errors.password = '密码不能为空'
+  }
+
+  return { errors, valid: Object.keys(errors).length < 1 }
+
 }

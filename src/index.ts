@@ -17,6 +17,8 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.post('/user/register', userController.postRegister)
 
+app.post('/user/login', userController.postLogin)
+
 app.use((_req: Request, _res: Response, next: NextFunction) => {
   const error = new HttpException(NOT_FOUND, 'Router not found')
   next(error)

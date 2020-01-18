@@ -56,7 +56,6 @@ export const postRegister = async (
       success: true,
       data: {
         token,
-        ...resUser._doc
       },
       message: '注册成功'
     })

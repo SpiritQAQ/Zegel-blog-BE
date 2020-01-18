@@ -36,7 +36,7 @@ userSchema.methods.generateToken = function () {
     payload,
     process.env.JWT_SECRET_KEY!, // 非空断言
     {
-      expiresIn: '1h'
+      expiresIn: '7 days'
     }
   )
 }
