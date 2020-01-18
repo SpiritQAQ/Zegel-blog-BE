@@ -1,13 +1,12 @@
-import { Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import HttpException from '../exceptions/HttpException'
 import { UNAUTHORIZED } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
 import User from '../mongoModels/User'
 import { JwtPayload } from '../types/Jwt'
-import { RequestWithUser } from '../types/RequestWithUser'
 
 const checkAuthMiddleware = async (
-  req: RequestWithUser,
+  req: Request,
   _res: Response,
   next: NextFunction
 ) => {

@@ -4,7 +4,7 @@ import isEmpty from "validator/lib/isEmpty";
 import HttpException from "../exceptions/HttpException";
 import { UNPROCESSABLE_ENTITY } from "http-status-codes";
 import { IPostDocument } from '../mongoModels/post'
-import { RequestWithUser } from "src/types/RequestWithUser";
+import { IUserDocument } from "src/mongoModels/User";
 
 export const getPosts = async (
   _req: Request,
@@ -24,12 +24,12 @@ export const getPosts = async (
 }
 
 export const createPost = async (
-  req: RequestWithUser,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const user = req.currentUser
+    const user = req.currentUser as IUserDocument
 
     const { body }: { body: IPostDocument['body'] } = req.body
 
