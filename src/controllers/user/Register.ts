@@ -50,12 +50,12 @@ export const postRegister = async (
 
     const resUser = await newUser.save()
 
-    const token: string = resUser.generateToken()
+    const token: string = 'Bearer ' + resUser.generateToken()
 
     res.json({
       success: true,
       data: {
-        token,
+        token
       },
       message: '注册成功'
     })

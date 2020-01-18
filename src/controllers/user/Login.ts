@@ -40,7 +40,7 @@ export const postLogin = async (
       throw new HttpException(UNPROCESSABLE_ENTITY, errorText)
     }
 
-    const token = user.generateToken()
+    const token = 'Bearer ' + user.generateToken()
 
     res.json({
       success: true,
