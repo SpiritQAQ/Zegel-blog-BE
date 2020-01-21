@@ -1,6 +1,8 @@
 import isEmail from 'validator/lib/isEmail'
 import isEmpty from 'validator/lib/isEmpty'
 import { IUserDocument } from '../mongoModels/User'
+import HttpException from '../exceptions/HttpException'
+import { UNPROCESSABLE_ENTITY } from 'http-status-codes'
 
 interface RegisterInputError extends Partial<IUserDocument> {
   confirmPassword?: string
@@ -54,4 +56,10 @@ export const validateLoginInput = (
 
   return { errors, valid: Object.keys(errors).length < 1 }
 
+}
+
+export const checkPostBody = (body: string) => {
+  if (isEmpty(body.trim())) {
+    throw new HttpException(UNPROCESSABLE_ENTITY, 'Body不能为空')
+  }
 }

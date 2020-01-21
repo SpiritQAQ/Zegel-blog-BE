@@ -23,6 +23,7 @@ app.post('/user/login', userController.postLogin)
 
 app.get('/post', postController.getPosts)
 app.post('/createPost', checkAuthMiddleware, postController.createPost)
+app.post('/updatePost', checkAuthMiddleware, postController.updatePost)
 
 app.use((_req: Request, _res: Response, next: NextFunction) => {
   const error = new HttpException(NOT_FOUND, 'Router not found')

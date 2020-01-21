@@ -3,6 +3,7 @@ import { IUserDocument } from "./User";
 
 export interface IPostDocument extends Document {
   body: string,
+  username: string,
   createAt: Date,
   user: IUserDocument['_id']
 }

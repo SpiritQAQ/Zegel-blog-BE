@@ -1,18 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import Post from "../mongoModels/post";
-import isEmpty from "validator/lib/isEmpty";
 import HttpException from "../exceptions/HttpException";
-import { UNPROCESSABLE_ENTITY } from "http-status-codes";
+import { NOT_FOUND, UNAUTHORIZED } from "http-status-codes";
 import { IPostDocument } from '../mongoModels/post'
 import { IUserDocument } from "src/mongoModels/User";
+import { checkPostBody } from "../utils/validator";
 
 export const getPosts = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const posts = await Post.find()
+    const { id } = req.query
+    console.log("TCL: id", id)
+
+    let posts
+    if (id) {
+      posts = await Post.findById(id)
+    } else {
+      posts = await Post.find()
+    }
 
     res.json({
       success: true,
@@ -33,9 +41,7 @@ export const createPost = async (
 
     const { body }: { body: IPostDocument['body'] } = req.body
 
-    if (isEmpty(body.trim())) {
-      throw new HttpException(UNPROCESSABLE_ENTITY, 'Body不能为空')
-    }
+    checkPostBody(body)
 
     const newPost = new Post({
       body,
@@ -54,5 +60,40 @@ export const createPost = async (
   } catch (error) {
     next(error)
   }
+}
 
+export const updatePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.query
+    const { body }: { body: IPostDocument['body'] } = req.body
+    const user = req.currentUser as IUserDocument
+    const post = await Post.findById(id)
+
+    checkPostBody(body)
+
+    if (post) {
+      console.log("TCL: post", post)
+      if (post.username === user.username) {
+        const resPost = await Post.findByIdAndUpdate(id, { body }, { new: true })
+        res.json({
+          success: true,
+          data: resPost,
+          message: '修改成功'
+        })
+      } else {
+        throw new HttpException(UNAUTHORIZED, '没有权限')
+      }
+
+    } else {
+      throw new HttpException(NOT_FOUND, '未找到该POST')
+    }
+
+
+  } catch (e) {
+    next(e)
+  }
 }
