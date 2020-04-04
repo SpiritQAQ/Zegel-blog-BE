@@ -1,7 +1,9 @@
 import { Schema, model, Document } from 'mongoose'
 /**
  * @params
- *  status: 0 草稿 1 已发布 2 已删除
+ *  title： 标题
+ *  body： 正文
+ *  status： 0 草稿 1 已发布 2 已删除
  *  views： 浏览量
  *  category： 文章分类id
  *  abstract： 文章摘要

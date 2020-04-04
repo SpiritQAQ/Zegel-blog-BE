@@ -17,10 +17,8 @@ export const EditArticle = async (
 
     if (aData.id) {
       const article = await Article.findOne({ _id: aData.id })
-      console.log(article)
 
       if (!article) throw new HttpException(UNPROCESSABLE_ENTITY, '未查询到相关文章')
-      console.log('change')
       await article.updateOne({
         ...aData
       })
