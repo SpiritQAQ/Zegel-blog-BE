@@ -17,9 +17,7 @@ export const GetArticleList = async (
 
     res.json({
       success: true,
-      data: {
-        ...articleList
-      },
+      data: articleList,
       message: '查询成功'
     })
   }
