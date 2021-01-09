@@ -7,6 +7,7 @@ import * as userController from './controllers/user/index'
 import 'dotenv/config'
 import * as postController from './controllers/post'
 import * as articleController from './controllers/article'
+import * as tagController from './controllers/tag'
 import checkAuthMiddleware from './middlewares/check-auth.middleware'
 
 const app: Express = express()
@@ -29,6 +30,10 @@ app.post('/updatePost', checkAuthMiddleware, postController.updatePost)
 app.post('/editArticle', articleController.EditArticle)
 app.get('/article/list', articleController.GetArticleList)
 app.get('/article/detail', articleController.GetArticleDetail)
+
+app.get('/getTag', tagController.GetTag)
+app.post('/bindTag', tagController.BindTag)
+app.post('/createTag', tagController.CreateTag)
 
 app.use((_req: Request, _res: Response, next: NextFunction) => {
   const error = new HttpException(NOT_FOUND, 'Router not found')

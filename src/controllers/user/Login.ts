@@ -13,6 +13,7 @@ export const postLogin = async (
 ) => {
   try {
     const { usernameOrEmail, password } = req.body
+    console.log("req", req.body)
 
     const { valid, errors } = validateLoginInput(
       usernameOrEmail,
