@@ -7,7 +7,6 @@ import 'dotenv/config'
 
 import { initRoute } from './routes'
 
-
 const app: Express = express()
 const PORT: any = process.env.PORT || 3000
 
@@ -25,7 +24,7 @@ app.use(errorMiddleware)
 const run = async () => {
   await mongoose.connect(`mongodb://localhost:27017/tsexpress`, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   app.listen(PORT, () => {
     console.log(`Service is running on http://localhost:${PORT}`)

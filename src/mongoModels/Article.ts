@@ -11,12 +11,12 @@ import { Schema, model, Document } from 'mongoose'
  */
 
 export interface IArticleDocument extends Document {
-  title: string,
-  body: string,
-  createAt?: Date,
-  updateAt?: Date,
-  status?: number,
-  views?: number,
+  title: string
+  body: string
+  createAt?: Date
+  updateAt?: Date
+  status?: number
+  views?: number
   // category: ICategoryDocument['_id'],
   abstract?: string
 }
@@ -29,7 +29,7 @@ const articleDataSchema = new Schema(
       type: String,
       trim: true,
       required: [true, '文章标题不能为空'],
-      maxlength: [70, '文章标题最长为70个字符']
+      maxlength: [70, '文章标题最长为70个字符'],
     },
     body: {
       type: String,
@@ -42,17 +42,17 @@ const articleDataSchema = new Schema(
       default: 1,
       min: 0,
       max: 2,
-      required: [true, '文章类型没有选择']
+      required: [true, '文章类型没有选择'],
     },
     views: Number,
     // category: {
     //   type: Schema.Types.ObjectId,
     //   ref: 'categorys',
     // },
-    abstract: String
+    abstract: String,
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 )
 
