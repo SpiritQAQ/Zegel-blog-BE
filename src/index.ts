@@ -3,37 +3,17 @@ import mongoose from 'mongoose'
 import { NOT_FOUND } from 'http-status-codes'
 import HttpException from './exceptions/HttpException'
 import errorMiddleware from './middlewares/error.middleware'
-import * as userController from './controllers/user/index'
 import 'dotenv/config'
-import * as postController from './controllers/post'
-import * as articleController from './controllers/article'
-import * as tagController from './controllers/tag'
-import checkAuthMiddleware from './middlewares/check-auth.middleware'
+
+import { initRoute } from './routes'
+
 
 const app: Express = express()
 const PORT: any = process.env.PORT || 3000
 
 app.use(express.json()) // body parser
 
-app.get('/', (_req: Request, res: Response) => {
-  res.send('hello world')
-})
-
-app.post('/user/register', userController.postRegister)
-
-app.post('/user/login', userController.postLogin)
-
-app.get('/post', postController.getPosts)
-app.post('/createPost', checkAuthMiddleware, postController.createPost)
-app.post('/updatePost', checkAuthMiddleware, postController.updatePost)
-
-app.post('/editArticle', articleController.EditArticle)
-app.get('/article/list', articleController.GetArticleList)
-app.get('/article/detail', articleController.GetArticleDetail)
-
-app.get('/getTag', tagController.GetTag)
-app.post('/bindTag', tagController.BindTag)
-app.post('/createTag', tagController.CreateTag)
+initRoute(app)
 
 app.use((_req: Request, _res: Response, next: NextFunction) => {
   const error = new HttpException(NOT_FOUND, 'Router not found')
